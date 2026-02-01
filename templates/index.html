@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Микрокредитный скоринг</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 40px;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            width: 350px;
+            border-radius: 8px;
+        }
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Анкета микрокредитного скоринга</h2>
+
+<form action="/predict" method="post">
+    <input type="number" name="Age" placeholder="Возраст" required>
+    <input type="number" name="Income" placeholder="Доход" required>
+    <input type="number" name="LoanAmount" placeholder="Сумма кредита" required>
+    <input type="number" name="NumCreditLines" placeholder="Кол-во кредитных линий" required>
+    <input type="number" step="0.01" name="InterestRate" placeholder="Процентная ставка" required>
+
+    <button type="submit">Отправить</button>
+</form>
+
+{% if result is not none %}
+    <div class="result">
+        {% if result == 0 %}
+            ✅ Одобрили (0)
+        {% else %}
+            ❌ Отказали (1)
+        {% endif %}
+    </div>
+{% endif %}
+
+</body>
+</html>
