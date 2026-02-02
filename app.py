@@ -48,7 +48,12 @@ def predict(
         "InterestRate": InterestRate
     }])
 
-    prediction = int(model.predict(df)[0])
+    prediction = 0
+
+    if 18<=df['Age']<=100 and 10000<df['Income'] and 5000<=df['LoanAmount']<=250000 and df['NumCreditLines']<=5 and 2<=df['InterestRate']<=25:
+        prediction = int(model.predict(df)[0])
+    else:
+        prediction = -1
 
     return templates.TemplateResponse(
         "index.html",
