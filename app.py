@@ -48,9 +48,20 @@ def predict(
         "InterestRate": InterestRate
     }])
 
-    prediction = 0
 
-    if 18<=df['Age']<=100 and 10000<df['Income'] and 5000<=df['LoanAmount']<=250000 and df['NumCreditLines']<=5 and 2<=df['InterestRate']<=25:
+    age = Age
+    income = Income
+    loan = LoanAmount
+    credits = NumCreditLines
+    rate = InterestRate
+
+    if (
+        18 <= age <= 100 and
+        income > 10000 and
+        5000 <= loan <= 250000 and
+        credits <= 5 and
+        2 <= rate <= 25
+    ):
         prediction = int(model.predict(df)[0])
     else:
         prediction = -1
