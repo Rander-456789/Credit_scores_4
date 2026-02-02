@@ -7,14 +7,27 @@ import joblib
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
+# Загружаем модель
 model = joblib.load("model.pkl")
+
+FEATURES = [
+    "Age",
+    "Income",
+    "LoanAmount",
+    "NumCreditLines",
+    "InterestRate"
+]
 
 
 @app.get("/", response_class=HTMLResponse)
-def form(request: Request):
+def index(request: Request):
     return templates.TemplateResponse(
         "index.html",
-        {"request": request, "result": None}
+        {
+            "request": request,
+            "result": None,
+            "form": {}
+        }
     )
 
 
@@ -26,22 +39,22 @@ def predict(
     LoanAmount: float = Form(...),
     NumCreditLines: int = Form(...),
     InterestRate: float = Form(...)
-):
-    df = pd.DataFrame({
-    "Age": [Age],
-    "Income": [Income],
-    "LoanAmount": [LoanAmount],
-    "NumCreditLines": [NumCreditLines],
-    "InterestRate": [InterestRate],
-    })
+    ):
+    df = pd.DataFrame([{
+        "Age": Age,
+        "Income": Income,
+        "LoanAmount": LoanAmount,
+        "NumCreditLines": NumCreditLines,
+        "InterestRate": InterestRate
+    }])
 
-
-    prediction = model.predict(df)[0]
+    prediction = int(model.predict(df)[0])
 
     return templates.TemplateResponse(
         "index.html",
         {
             "request": request,
-            "result": int(prediction)
+            "result": prediction,
+            "form": df.iloc[0].to_dict()
         }
     )

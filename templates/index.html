@@ -2,54 +2,109 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Микрокредитный скоринг</title>
+    <title>Кредитный скоринг</title>
     <style>
         body {
-            font-family: Arial;
-            background: #f4f4f4;
-            padding: 40px;
+            background: linear-gradient(120deg, #0f172a, #1e3a8a);
+            font-family: Arial, sans-serif;
+            color: #1f2937;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        form {
+
+        .card {
             background: white;
-            padding: 20px;
-            width: 350px;
-            border-radius: 8px;
+            padding: 30px;
+            width: 380px;
+            border-radius: 14px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
         }
+
+        h2 {
+            text-align: center;
+            color: #1e40af;
+            margin-bottom: 20px;
+        }
+
         input, button {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             margin-top: 10px;
+            border-radius: 6px;
+            border: 1px solid #c7d2fe;
+            font-size: 14px;
         }
+
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
         .result {
             margin-top: 20px;
+            text-align: center;
             font-size: 18px;
             font-weight: bold;
+        }
+
+        .ok {
+            color: #16a34a;
+        }
+
+        .bad {
+            color: #dc2626;
         }
     </style>
 </head>
 <body>
 
-<h2>Анкета микрокредитного скоринга</h2>
+<div class="card">
+    <h2>Микрокредитный скоринг</h2>
 
-<form action="/predict" method="post">
-    <input type="number" name="Age" placeholder="Возраст" required>
-    <input type="number" name="Income" placeholder="Доход" required>
-    <input type="number" name="LoanAmount" placeholder="Сумма кредита" required>
-    <input type="number" name="NumCreditLines" placeholder="Кол-во кредитных линий" required>
-    <input type="number" step="0.01" name="InterestRate" placeholder="Процентная ставка" required>
+    <form method="post" action="/predict">
+        <input type="number" name="Age" placeholder="Возраст"
+               value="{{ form.Age | default('') }}" required>
 
-    <button type="submit">Отправить</button>
-</form>
+        <input type="number" name="Income" placeholder="Доход"
+               value="{{ form.Income | default('') }}" required>
 
-{% if result is not none %}
-    <div class="result">
-        {% if result == 0 %}
-            ✅ Одобрили (0)
-        {% else %}
-            ❌ Отказали (1)
-        {% endif %}
-    </div>
-{% endif %}
+        <input type="number" name="LoanAmount" placeholder="Сумма кредита"
+               value="{{ form.LoanAmount | default('') }}" required>
+
+        <input type="number" name="NumCreditLines" placeholder="Кредитные линии"
+               value="{{ form.NumCreditLines | default('') }}" required>
+
+        <input type="number" step="0.01" name="InterestRate" placeholder="Процентная ставка"
+               value="{{ form.InterestRate | default('') }}" required>
+
+        <button type="submit">Оценить</button>
+    </form>
+
+    {% if result is not none %}
+        <div class="result">
+            {% if result == 0 %}
+                <span class="ok">✅ Одобрено</span>
+            {% else %}
+                <span class="bad">❌ Отказ</span>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
 
 </body>
 </html>
