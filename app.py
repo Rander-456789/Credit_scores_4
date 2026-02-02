@@ -28,8 +28,13 @@ def predict(
     InterestRate: float = Form(...)
 ):
     df = pd.DataFrame({
-        "InterestRate": [InterestRate]
+    "Age": [Age],
+    "Income": [Income],
+    "LoanAmount": [LoanAmount],
+    "NumCreditLines": [NumCreditLines],
+    "InterestRate": [InterestRate],
     })
+
 
     prediction = model.predict(df)[0]
 
